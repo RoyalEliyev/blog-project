@@ -1,0 +1,28 @@
+{% extends 'base.html '%}
+
+{% block title %}Blog's{%endblock%}
+
+{% block content%}
+    <div class="alert alert-success" role="alert">
+        <h4 class="alert-heading">RECENT POSTS</h4>
+        <p>OUR RECENT BLOG ENTRIES</p>
+    </div>
+      {% for post in posts %}
+      <div class="card" style="width: 25rem;">
+        <img src="{{post.poster.url}}" class="card-img-top" alt="">
+        <div class="card-body">
+          <p class="card-text">{{post.name}}</p>
+        </div>
+        <div class="card-body">
+          <a href="url 'detail'">{{post.title}}</h4></a>
+        </div>
+        <div class="card-body">
+          <p class="card-text">{{post.user}} | {{post.pub_date}} </p>
+        </div>
+        <div class="card-body">
+          <p class="card-text">{{post.about}} </p>
+        </div>
+      </div>
+      {% endfor %}
+    </div> 
+{% endblock %}
