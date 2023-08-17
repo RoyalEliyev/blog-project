@@ -23,9 +23,9 @@ from django.conf import settings
 urlpatterns = [
     path('admin/', admin.site.urls),
     path("", views.IndexView.as_view(), name="index"),
-    path("blogs", include("blog.urls")),
+    path("blogs/", include("blog.urls")),
     path("accounts/", include("account.urls")),
 ]
 
 urlpatterns += static(settings.MEDIA_URL,document_root=settings.MEDIA_ROOT)
-
+urlpatterns += static(settings.STATIC_URL,document_root=settings.STATIC_ROOT)
