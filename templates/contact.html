@@ -67,6 +67,28 @@ https://templatemo.com/tm-551-stand-blog
               <li class="nav-item active">
                 <a class="nav-link" href="{% url 'contact' %}">Contact Us</a>
               </li>
+              {% if request.user.is_authenticated %}
+              <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                  {{ request.user.username }}
+                </a>
+                <ul class="dropdown-menu dropdown-menu-dark">
+                  <li><a class="dropdown-item" href="{%url 'login'%}">Logout</a></li>
+                </ul>
+              </li>
+              {% else %}
+              <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                  Login/Signup
+                </a>
+                <ul class="dropdown-menu dropdown-menu-dark">
+                  <li><a class="dropdown-item" href="{%url 'login'%}">Login</a></li>
+                    <hr class="dropdown-divider">
+                  </li>
+                  <li><a class="dropdown-item" href="{%url 'signup'%}">Signup</a></li>
+                </ul>
+              </li>
+              {% endif %}
             </ul>
           </div>
         </div>

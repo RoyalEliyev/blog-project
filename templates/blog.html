@@ -59,7 +59,7 @@ https://templatemo.com/tm-551-stand-blog
                 <a class="nav-link" href="{% url 'about' %}">About Us</a>
               </li>
               <li class="nav-item active">
-                <a class="nav-link" href="">Blog Entries</a>
+                <a class="nav-link" href="{% url 'blog' %}">Blog Entries</a>
               </li>
               <li class="nav-item">
                 <a class="nav-link" href="{% url 'post-details' %}">Post Details</a>
@@ -67,6 +67,28 @@ https://templatemo.com/tm-551-stand-blog
               <li class="nav-item">
                 <a class="nav-link" href="{% url 'contact' %}">Contact Us</a>
               </li>
+              {% if request.user.is_authenticated %}
+              <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                  {{ request.user.username }}
+                </a>
+                <ul class="dropdown-menu dropdown-menu-dark">
+                  <li><a class="dropdown-item" href="{%url 'login'%}">Logout</a></li>
+                </ul>
+              </li>
+              {% else %}
+              <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                  Login/Signup
+                </a>
+                <ul class="dropdown-menu dropdown-menu-dark">
+                  <li><a class="dropdown-item" href="{%url 'login'%}">Login</a></li>
+                    <hr class="dropdown-divider">
+                  </li>
+                  <li><a class="dropdown-item" href="{%url 'signup'%}">Signup</a></li>
+                </ul>
+              </li>
+              {% endif %}
             </ul>
           </div>
         </div>
@@ -158,8 +180,8 @@ https://templatemo.com/tm-551-stand-blog
                       <span>Lifestyle</span>
                       <a href="{% url 'post-details' %}"><h4>Suspendisse et metus</h4></a>
                       <ul class="post-info">
-                        <li><a href="#">Admin</a></li>
-                        <li><a href="#">May 22, 2020</a></li>
+                        <li><a href="#">{{blog.user}}</a></li>
+                        <li><a href="#">{{blog.pub_date}}</a></li>
                         <li><a href="#">26 Comments</a></li>
                       </ul>
                       <p>Nullam nibh mi, tincidunt sed sapien ut, rutrum hendrerit velit. Integer auctor a mauris sit amet eleifend.</p>
@@ -318,16 +340,8 @@ https://templatemo.com/tm-551-stand-blog
                     <div class="content">
                       <ul>
                         <li><a href="{% url 'post-details' %}">
-                          <h5>Vestibulum id turpis porttitor sapien facilisis scelerisque</h5>
-                          <span>May 31, 2020</span>
-                        </a></li>
-                        <li><a href="{% url 'post-details' %}">
-                          <h5>Suspendisse et metus nec libero ultrices varius eget in risus</h5>
-                          <span>May 28, 2020</span>
-                        </a></li>
-                        <li><a href="{% url 'post-details' %}">
-                          <h5>Swag hella echo park leggings, shaman cornhole ethical coloring</h5>
-                          <span>May 14, 2020</span>
+                          <h5>{{blog.name}}</h5>
+                          <span>{{blog.pub_date}}</span>
                         </a></li>
                       </ul>
                     </div>
@@ -424,3 +438,6 @@ https://templatemo.com/tm-551-stand-blog
 
   </body>
 </html>
+
+
+
