@@ -6,12 +6,10 @@ from django.db.models import Q
 
 class IndexView(View):
     def get(self, request, *args, **kwags):
-        # blogs = BlogModel.objects.filter(
-        #    user = request.user
-        # )
-        # context = {
-        #    "blogs":blogs,
-        # }
+        blogs = BlogModel.objects.all()
+        context = {
+           "blogs":blogs,
+        }
         # query = request.GET.get("blog")
         # context = {}
         # if query:
@@ -30,7 +28,7 @@ class IndexView(View):
 
         # context["blogs"] = blogs
         # context["query"] = query
-        return render(request, "index.html")
+        return render(request, "index.html", context)
     
     # def post(self, request, *args, **kwargs):
     #     name = request.POST.get("name")
@@ -48,11 +46,11 @@ class IndexView(View):
 
 class AboutView(View):
     def get(self, request, *args, **kwags):
-        # abouts = AboutModel.objects.all()
-        # context = {
-        #     "about":abouts,
-        # }
-        return render(request, "about.html")
+        abouts = AboutModel.objects.all()
+        context = {
+            "about":abouts,
+        }
+        return render(request, "about.html", context)
     # def post(self, request, *args, **kwags):
     #     name = request.POST.get("name")
     #     title = request.POST.get("title")
@@ -66,50 +64,54 @@ class AboutView(View):
     
 class PostView(View):
     def get(self, request, *args, **kwags):
-        # posts = BlogModel.objects.filter(
-        #     user = request.user,
-        # )
-        # context = {
-        #     "posts":posts,
-        # }
-        return render(request, "post.html")
-    # def post(self, request, *args, **kwargs):
-    #     name = request.POST.get("name")
-    #     pub_date = request.POST.get("pub_date")
-    #     about = request.POST.get("about")
-    #     poster = request.POST.get("posters")
-    #     BlogModel.objects.create(
-    #         user = request.user,
-    #         name = name,
-    #         pub_date = pub_date,
-    #         about = about,
-    #         poster = poster,
-    #     )
-    #     return redirect("index")
+        posts = BlogModel.objects.filter(
+            user = request.user,
+        )
+        context = {
+            "posts":posts,
+        }
+        return render(request, "post.html", context)
+    def post(self, request, *args, **kwargs):
+        name = request.POST.get("name")
+        pub_date = request.POST.get("pub_date")
+        about = request.POST.get("about")
+        poster = request.POST.get("posters")
+        BlogModel.objects.create(
+            user = request.user,
+            name = name,
+            pub_date = pub_date,
+            about = about,
+            poster = poster,
+        )
+        return redirect("index")
     
 class ContactView(View):
     def get(self, request, *args, **kwags):
-        # contacts = ContactModel.objects.all()
-        # context = {
-        #     "contacts":contacts,
-        # }
-        return render(request, "contact.html")
-    # def post(self, request, *args, **kwags):
-    #     name = request.POST.get("name")
-    #     email = request.POST.get("email")
-    #     phone_number = request.POST.get("phone_number")
-    #     subject = request.POST.get("subject")
-    #     message = request.POST.get("message")
-    #     BlogModel.objects.create(
-    #         user = request.user,
-    #         name = name,
-    #         email = email,
-    #         phone_number = phone_number,
-    #         subject = subject,
-    #         message = message,
-    #     )
-    #     return redirect("post")
+        contacts = ContactModel.objects.all()
+        context = {
+            "contacts":contacts,
+        }
+        return render(request, "contact.html", context)
+    def post(self, request, *args, **kwags):
+        name = request.POST.get("name")
+        email = request.POST.get("email")
+        phone_number = request.POST.get("phone_number")
+        subject = request.POST.get("subject")
+        message = request.POST.get("message")
+        BlogModel.objects.create(
+            user = request.user,
+            name = name,
+            email = email,
+            phone_number = phone_number,
+            subject = subject,
+            message = message,
+        )
+        return redirect("post")
 
 class DetailView(View):
     def get(self, request, *args, **kwags):
         return render(request, "detail.html")
+    
+class BlogView(View):
+    def get(self, request, *args, **kwags):
+        return render(request, "blog.html")
