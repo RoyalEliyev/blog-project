@@ -1,14 +1,16 @@
 from django.shortcuts import render, redirect
 from django.views.generic import View
-from blog.models import BlogModel, AboutModel, ContactModel
+from blog.models import BlogModel, AboutModel, ContactModel, SosialMediaModel, CommentModel
 from django.db.models import Q
-
+from django.http import Http404
 
 class IndexView(View):
     def get(self, request, *args, **kwags):
         blogs = BlogModel.objects.all()
+        sosial_medias = SosialMediaModel.objects.all()
         context = {
            "blogs":blogs,
+           "sosial_medias":sosial_medias,
         }
         # query = request.GET.get("blog")
         # context = {}
@@ -47,8 +49,10 @@ class IndexView(View):
 class AboutView(View):
     def get(self, request, *args, **kwags):
         abouts = AboutModel.objects.all()
+        sosial_medias = SosialMediaModel.objects.all()
         context = {
             "about":abouts,
+            "sosial_medias":sosial_medias,
         }
         return render(request, "about.html", context)
     # def post(self, request, *args, **kwags):
@@ -63,14 +67,60 @@ class AboutView(View):
     #     return redirect("about")
     
 class PostView(View):
-    def get(self, request, *args, **kwags):
-        posts = BlogModel.objects.filter(
-            user = request.user,
-        )
+    def get(self, request, id, *args, **kwargs):
+        post = BlogModel.objects.get(id=id)
+        sosial_medias = SosialMediaModel.objects.all()
         context = {
-            "posts":posts,
+            "post":post,
+            "sosial_medias":sosial_medias,
         }
         return render(request, "post.html", context)
+    
+    def post(self, request,id, *args, **kwargs):
+        blog = BlogModel.objects.get(id=id)
+        content = request.POST.get("content")  
+
+        CommentModel.objects.create(
+            user = request.user,
+            blog =blog,
+            content=content,
+        )
+        return redirect("post", id=id)
+    
+class ContactView(View):
+    def get(self, request, *args, **kwags):
+        blogs = ContactModel.objects.all()
+        sosial_medias = SosialMediaModel.objects.all()
+        context = {
+            "blogs":blogs,
+            "sosial_medias":sosial_medias,
+        }
+        return render(request, "contact.html", context)
+    def post(self, request, *args, **kwags):
+        name = request.POST.get("name")
+        email = request.POST.get("email")
+        phone_number = request.POST.get("phone_number")
+        subject = request.POST.get("subject")
+        message = request.POST.get("message")
+        ContactModel.objects.create(
+            user = request.user,
+            name = name,
+            email = email,
+            phone_number = phone_number,
+            subject = subject,
+            message = message,
+        )
+
+
+class BlogView(View):
+    def get(self, request, *args, **kwags):
+        blogs = BlogModel.objects.all()
+        sosial_medias = SosialMediaModel.objects.all()
+        context = {
+            "blogs":blogs,
+            "sosial_medias":sosial_medias,
+        }
+        return render(request, "blog.html", context)
     def post(self, request, *args, **kwargs):
         name = request.POST.get("name")
         pub_date = request.POST.get("pub_date")
@@ -83,35 +133,26 @@ class PostView(View):
             about = about,
             poster = poster,
         )
-        return redirect("index")
-    
-class ContactView(View):
-    def get(self, request, *args, **kwags):
-        contacts = ContactModel.objects.all()
-        context = {
-            "contacts":contacts,
-        }
-        return render(request, "contact.html", context)
-    def post(self, request, *args, **kwags):
-        name = request.POST.get("name")
-        email = request.POST.get("email")
-        phone_number = request.POST.get("phone_number")
-        subject = request.POST.get("subject")
-        message = request.POST.get("message")
-        BlogModel.objects.create(
-            user = request.user,
-            name = name,
-            email = email,
-            phone_number = phone_number,
-            subject = subject,
-            message = message,
-        )
-        return redirect("post")
 
-class DetailView(View):
-    def get(self, request, *args, **kwags):
-        return render(request, "detail.html")
     
-class BlogView(View):
+
+class SosialMedia(View):
     def get(self, request, *args, **kwags):
-        return render(request, "blog.html")
+        sosial_medias = SosialMediaModel.objects.all()
+        context = {
+            "sosial_medias":sosial_medias,
+        }
+        return render(request, "base.html", context)
+    
+    def post(self, request, *args, **kwargs):
+        name = request.POST.get("name")
+        link = request.POST.get("link")
+
+        SosialMedia.objects.create(
+            name = name,
+            link = link,
+        )
+
+
+
+    
